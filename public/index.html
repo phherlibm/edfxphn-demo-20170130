@@ -2,7 +2,7 @@
 <html>
 
   <head>
-    <title>NodeJS Starter Application</title>
+    <title>My Translation Application</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,11 +13,20 @@
     <table>
       <tr>
         <td style= "width:30%;">
-          <img class = "newappIcon" src="images/newapp-icon.png">
+          <img class = "newappIcon" src="images/newapp-icon.png" alt="edfxphn">
         </td>
         <td>
-          <h1 id="message">Hello World!</h1>
-          <p class='description'></p> Thanks for creating a <span class = "blue">NodeJS Starter Application</span>.
+          <h1 id="message">My Translation Application</h1>
+          <form action="/translate/" method="post">
+    		<p>
+      			<label for="textToBeTranslated">Entrez un texte à traduire</label>
+      			<input type="text" name="toTranslateText" id="textToBeTranslated" autofocus />
+      			<input type="submit" />
+    		</p>
+  		  </form>
+		  <p>Texte traduit :</p>
+		  <p>
+		  </p>
         </td>
       </tr>
     </table>
