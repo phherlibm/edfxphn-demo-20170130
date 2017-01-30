@@ -1,0 +1,15 @@
+{
+	"plugins": {
+		"node": {},
+		"express": {},
+		"cfenv": {},
+		"express-session": {},
+		"watson-developer-cloud": {}
+	},
+	"ecmaVersion": 6,
+	"libs": [
+		"ecma5",
+		"ecma6"
+	],
+	"loadEagerly": []
+}

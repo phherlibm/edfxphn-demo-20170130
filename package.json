@@ -7,7 +7,10 @@
 	},
 	"dependencies": {
 		"express": "4.13.x",
-		"cfenv": "1.0.x"
+		"cfenv": "1.0.x",
+		"ejs": "2.5.x",
+		"express-session" : "1.15.x",
+		"watson-developer-cloud": "2.15.x"
 	},
 	"repository": {},
 	"engines": {
