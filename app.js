@@ -15,12 +15,6 @@ var bodyParser = require("body-parser");
 
 // get the app environment from Cloud Foundry
 var appEnv = cfenv.getAppEnv();
-console.log("service : " + JSON.stringify(appEnv.getService(/translator/i)));
-console.log("service credentials : " + JSON.stringify(appEnv.getService(/translator/i).credentials));
-console.log("service url : " + JSON.stringify(appEnv.getService(/translator/i).credentials.url));
-console.log("service user : " + JSON.stringify(appEnv.getService(/translator/i).credentials.username));
-console.log("service pws : " + JSON.stringify(appEnv.getService(/translator/i).credentials.password));
-
 
 // Watson Services
 var LanguageTranslatorV2 = require("watson-developer-cloud/language-translator/v2");
@@ -100,5 +94,3 @@ app.listen(appEnv.port, '0.0.0.0', function() {
   // print a message when the server starts listening
   console.log("server starting on " + appEnv.url);
 });
-
-
