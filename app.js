@@ -4,19 +4,11 @@
 // node.js starter application for Bluemix
 //------------------------------------------------------------------------------
 
-// This application uses express as its web server
-// for more info, see: http://expressjs.com
 var express = require('express');
-
-// cfenv provides access to your Cloud Foundry environment
-// for more info, see: https://www.npmjs.com/package/cfenv
 var cfenv = require('cfenv');
-
-// Manage sesion
 var session = require("express-session");
-
-// create a new express server
 var app = express();
+var bodyParser = require("body-parser")
 
 // Watson Services
 var LanguageTranslatorV2 = require("watson-developer-cloud/language-translator/v2");
@@ -26,6 +18,8 @@ var language_translator = new LanguageTranslatorV2({
   url: 'https://gateway.watsonplatform.net/language-translator/api/'
 });
 
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
 
@@ -34,7 +28,6 @@ app.use(session({ secret : "edfxphn",
                   resave : false,
                   saveUninitialized : true
                 }));
-
 
 // Program
 app.get("/", function(request, response) {
@@ -48,33 +41,35 @@ app.get("/", function(request, response) {
 	}
 });
 
-app.post("/translate", function(request, response) {
-	console.log("POST /translate");
+app.post("/translate", urlencodedParser, function(request, response) {
+	console.log("POST /translate : " + request.body.toTranslateText);
 	language_translator.translate({
-  			text: 'A sentence must have a verb',
-  			source : 'en',
-  			target: 'fr'
+  			text: request.body.toTranslateText,
+  			source : "fr",
+  			target: "en"
   		},
 		function (err, translation) {
   		  if (err) {
   		  	console.log("   Translation error: " + err);
   		  	request.session.translatedText = err;
   		  } else {
-      		request.session.translatedText = JSON.stringify(translation, null, 2);
-      		/* request.session.translatedText = translation.transations[0].translation; */
+      		/* request.session.translatedText = JSON.stringify(translation, null, 2); */
+      		request.session.translatedText = translation.translations[0].translation;
   		  	console.log("   Translation: " + request.session.translatedText);
       	  }
-      	  
+
       	  console.log("Redirection vers /");
 	      response.redirect("/");
 
       	});
 });
 
+/*
 app.use(function(request, response) {
 	console.log("Défaut : renvoi de la page de garde");
 	response.render("index.ejs", {translatedText: ""});
 });
+*/
 
 // get the app environment from Cloud Foundry
 var appEnv = cfenv.getAppEnv();

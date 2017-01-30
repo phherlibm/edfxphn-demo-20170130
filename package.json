@@ -10,10 +10,11 @@
 		"cfenv": "1.0.x",
 		"ejs": "2.5.x",
 		"express-session" : "1.15.x",
-		"watson-developer-cloud": "2.15.x"
+		"watson-developer-cloud": "2.15.x",
+		"body-parser" : "1.16.x"
 	},
 	"repository": {},
 	"engines": {
 		"node": "4.x"
-	} 
+	}
 }
