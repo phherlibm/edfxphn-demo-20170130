@@ -1,36 +1,65 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
-    <title>My Translation Application</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="stylesheets/style.css">
-  </head>
+<head>
+  <title>My Translation Application</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="stylesheets/style.css">
+  <script>
+    var locationStatus = "";
+    var locationLatitude;
+    var locationLongitude;
 
-  <body>
-    <table>
-      <tr>
-        <td style= "width:30%;">
-          <img class = "newappIcon" src="images/newapp-icon.png" alt="edfxphn">
-        </td>
-        <td>
-          <h1 id="message">My Translation Application</h1>
-          <form action="/translate/" method="post">
-    		<p>
+    function getLocation() {
+      if (navigator.geolocation) {
+        console.log("Interrogation de la géolocation.");
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        console.log("La géolocalistion n'est pas supportée.");
+        locationStatus = "La géolocalistion n'est pas supportée par ce navigateur.";
+      }
+    }
+
+    function showPosition(position) {
+      console.log("Données de localisation : " + position.coords.latitude + ", " + position.coords.longitude);
+      locationLatitude = position.coords.latitude;
+      locationLongitude = position.coords.longitude;
+    }
+  </script>
+</head>
+
+<body>
+  <table>
+    <tr>
+      <td style= "width:30%;">
+        <img class = "newappIcon" src="images/newapp-icon.png" alt="edfxphn">
+      </td>
+      <td>
+        <h1 id="message">My Translation Application</h1>
+        <form action="/translate/" method="post">
+    	    <p>
       			<label for="textToBeTranslated">Entrez un texte à traduire</label>
       			<input type="text" name="toTranslateText" id="textToBeTranslated" autofocus />
       			<input type="submit" />
-    		</p>
+    		  </p>
   		  </form>
-		  <p>Texte traduit :</p>
-		  <p>
-		  	<%= translatedText %>
-		  </p>
-        </td>
-      </tr>
-    </table>
-  </body>
+		    <p>Texte traduit :</p>
+		    <p>
+		  	  <%= translatedText %>
+		    </p>
+
+        <p>
+          <script>
+            console.log("Demande la position");
+            getLocation();
+          </script>
+          <a href="/meteo" onclick="location.href=this.href + '?latitude=' + locationLatitude + '&amp;longitude=' + locationLongitude;return false;">Infos météo</a>
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>
 
 </html>

@@ -10,6 +10,7 @@ var cfenv = require('cfenv');
 var session = require("express-session");
 var app = express();
 var bodyParser = require("body-parser");
+var https = require("https");
 
 // Environnement
 
@@ -80,6 +81,44 @@ app.post("/translate", urlencodedParser, function(request, response) {
 	      response.redirect("/");
 
       	});
+});
+
+app.get("/meteo", function(request, response) {
+	console.log("Demande ma météo pour " + request.query.latitude + ", " + request.query.longitude);
+	var options = {
+		host: "twcservice.mybluemix.net",
+		method: "GET",
+		path: "/api/weather/v1/geocode/" + request.query.latitude + "/" + request.query.longitude + "/observations.json?language=fr-FR&units=m",
+		auth:"744fd58c-9555-4c34-8f86-a915f1651208:ibTP99RDM9"
+	};
+
+	https.get(options, function(httpsResponse) {
+		var twcData = "";
+		httpsResponse.on("data", function(chunck) {
+			twcData += chunck;
+		});
+		httpsResponse.on("end", function() {
+			var twcResponse = JSON.parse(twcData);
+
+			var body = "Station d'observation: " + twcResponse.observation.obs_name + "\n";
+			body += "Température: " + twcResponse.observation.temp + "°C" + "\n";
+			body += "Pression: " + twcResponse.observation.pressure_desc + "\n";
+			body += "Point de rosée: " + twcResponse.observation.dewPt + "°C" + "\n";
+			body += "Humidité relative: " + twcResponse.observation.rh + "%" + "\n";
+			body += "Pression: " + twcResponse.observation.pressure + " mb" + "\n";
+			if (twcResponse.observation.vis == 999) {
+				body += "Visibilité: maximale" + "\n";
+			} else {
+				body += "Visibilité: " + twcResponse.observation.vis + "\n";
+			}
+
+			response.set('Content-Type', 'text/plain');
+			response.send(body);
+			response.end();
+
+		});
+	});
+
 });
 
 /*
